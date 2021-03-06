@@ -1,3 +1,8 @@
+
+# Build Steps
+mvn install -DskipTests
+docker-compose up --build -d
+
 # customer-service
 This README outlines the details of collaborating on this Spring Boot application.
 
