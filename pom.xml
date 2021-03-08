@@ -8,11 +8,11 @@
 		<version>2.2.3.RELEASE</version>
 		<relativePath /> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.mukit</groupId>
-	<artifactId>customer-service</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<name>customer-service</name>
-	<description>Demo project for Spring Boot</description>
+	<groupId>com.tx</groupId>
+	<artifactId>gt</artifactId>
+	<version>1.0.0</version>
+	<name>gtExchange</name>
+	<description>gtExchange -- Stonehedge Enhanced</description>
 
 	<properties>
 		<java.version>1.8</java.version>
