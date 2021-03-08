@@ -1,7 +1,11 @@
 
 # Build Steps
-mvn install -DskipTests
-docker-compose up --build -d
+* mvn install -DskipTests
+* docker-compose up --build -d
+
+# Post Request
+* Specify ID: {"id":"3","symbol":"c","quantity":100}
+* Allow auto generation of ID: {"symbol":"c","quantity":100}
 
 # customer-service
 This README outlines the details of collaborating on this Spring Boot application.

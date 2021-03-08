@@ -6,6 +6,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,26 +30,6 @@ public class CustomerLedgerController {
 
 	@Autowired
 	CustomerLedgerService customerLedgerServiceImplementation;
-
-	@PostMapping
-	public ResponseEntity<?> addLedger(@RequestBody PostRequestEntity<CustomerLedgerView> postRequestEntity) {
-
-		CustomerLedgerView customerLedgerView = new CustomerLedgerView();
-		customerLedgerView = (CustomerLedgerView) postRequestEntity.data.attributes;
-		boolean success = customerLedgerServiceImplementation.save(customerLedgerView);
-		if (success) {
-			System.out.println("SUCCESS!!!");
-			return new ResponseEntity<>(HttpStatus.CREATED);
-		}
-		System.out.println("Failed!!!");
-		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-
-	}
-
-	@GetMapping("/testing")
-	public String test() {
-		return "Worked!";
-	}
 
 	@GetMapping("/customerId/{customerId}")
 	public ResponseEntity<?> findByCustomerId(@PathVariable("customerId") Integer cId) {
