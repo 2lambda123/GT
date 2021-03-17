@@ -1,0 +1,50 @@
+version: '3.3'
+
+services:
+  # Database Service
+  db:
+    image: mysql:latest
+    container_name: mysql-db2
+    environment:
+      - MYSQL_ROOT_PASSWORD=gt
+      - MYSQL_USER=root
+    ports:
+      - "3306:3306"
+    restart: always
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  # phpMyAdmin Service
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin:latest
+    container_name: my-php-myadmin
+    ports:
+      - "8082:80"
+    restart: always
+
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: gt
+
+  # gtExchange Spring Boot Application
+  gtExchange:
+    image: gt-exchange-image
+    container_name: gt-exchange-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8084:8084"
+    restart: always
+
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db2:3306/tx?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: gt
+
+volumes:
+  mysql_data:

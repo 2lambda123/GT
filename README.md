@@ -3,6 +3,8 @@
 * mvn install -DskipTests
 * docker-compose up --build -d
 
+* docker-compose -f docker-compose.backend.yml up --build -d (if you want to make UI separate)
+
 # Post Request
 * Specify ID: {"id":"3","symbol":"c","quantity":100}
 * Allow auto generation of ID: {"symbol":"c","quantity":100}

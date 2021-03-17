@@ -9,4 +9,6 @@ public interface OrderRepository extends JpaRepository<OrderData, Long> {
     @Query(value = "SELECT COUNT(*) FROM ORDERS", nativeQuery = true)
     Integer getNumberOfOrdersInDatabase();
 
+    Long removeById(Long id);
+
 }

@@ -49,4 +49,13 @@ public class OrderService {
         return numberOfOrdersInDatabase;
     }
 
+    public String deleteOrder(Long orderId) {
+        try {
+            orderRepository.deleteById(orderId);
+            return "Deleted!";
+        } catch (Exception e) {
+            return "Something went wrong deleting the order!";
+        }
+    }
+
 }
