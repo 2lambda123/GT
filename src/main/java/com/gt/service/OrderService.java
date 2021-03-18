@@ -4,7 +4,6 @@ import com.gt.common.Converter;
 import com.gt.model.data.OrderData;
 import com.gt.model.view.OrderView;
 import com.gt.repository.OrderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -13,8 +12,11 @@ import java.util.List;
 @Service
 public class OrderService {
 
-    @Autowired
     private OrderRepository orderRepository;
+
+    public OrderService(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
 
     public List<OrderView> findAll() {
         List<OrderView> orderViewList = new ArrayList<>();
@@ -55,6 +57,30 @@ public class OrderService {
             return "Deleted!";
         } catch (Exception e) {
             return "Something went wrong deleting the order!";
+        }
+    }
+
+    public OrderView getOrder(Long id) {
+        OrderView orderFromDatabase = new OrderView();
+        try {
+            OrderData data = orderRepository.getOne(id);
+            Converter.dataToViewModelConverterForSingleOrder(orderFromDatabase, data);
+        } catch (Exception e) {
+            System.out.println("Something went wrong!");
+        }
+        return orderFromDatabase;
+    }
+
+    public String updateOrder(Long id, OrderView orderView) {
+        try {
+            OrderData data = orderRepository.getOne(id);
+            data.setQuantity(orderView.getQuantity());
+            data.setSymbol(orderView.getSymbol());
+            data.setPrice(orderView.getPrice());
+            orderRepository.save(data);
+            return "Updated order!";
+        } catch (Exception e) {
+            return "Something went wrong!";
         }
     }
 

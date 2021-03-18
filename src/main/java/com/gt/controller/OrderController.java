@@ -1,7 +1,6 @@
 package com.gt.controller;
 
-import com.gt.common.response.get.GetRequestResponseBody;
-import com.gt.common.response.get.GetRequestResponseEntityForList;
+import com.gt.enigma.Engine;
 import com.gt.model.view.OrderView;
 import com.gt.service.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin
@@ -20,25 +18,15 @@ public class OrderController {
     @Autowired
     OrderService orderSerivce;
 
+    Engine engine;
+
+    public OrderController() {
+        engine = new Engine();
+    }
+
     @GetMapping("/all")
     public List<OrderView> findAll() {
-        GetRequestResponseEntityForList<OrderView, Long> responseObject = new GetRequestResponseEntityForList<OrderView, Long>();
-        List<OrderView> orderViewList = orderSerivce.findAll();
-
-        if (orderViewList != null) {
-            List<GetRequestResponseBody<OrderView, Long>> responseBody = new ArrayList<GetRequestResponseBody<OrderView, Long>>();
-            for (OrderView orderView : orderViewList) {
-                GetRequestResponseBody<OrderView, Long> getRequestResponseBody = new GetRequestResponseBody<OrderView, Long>();
-                getRequestResponseBody.id = orderView.getId();
-                getRequestResponseBody.type = "order";
-                getRequestResponseBody.attributes = orderView;
-                responseBody.add(getRequestResponseBody);
-            }
-            responseObject.data = responseBody;
-            return orderViewList;
-        } else {
-            return new ArrayList<>();
-        }
+        return orderSerivce.findAll();
     }
 
     @GetMapping("/count")
@@ -47,9 +35,12 @@ public class OrderController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addOrder(@RequestBody OrderView postRequestEntity) {
-        boolean success = orderSerivce.save(postRequestEntity);
-        if (success) {
+    public ResponseEntity<?> addOrder(@RequestBody OrderView order) {
+        boolean didProcess = engine.processOrder(order);
+        System.out.println("It processed correctly: " + didProcess);
+        boolean success = orderSerivce.save(order);
+        System.out.println("It saved in the database: " + success);
+        if (didProcess && success) {
             System.out.println("SUCCESS!!!");
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
@@ -57,9 +48,21 @@ public class OrderController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    @GetMapping("/get/{id}")
+    public OrderView getOrder(@PathVariable Long id) {
+        OrderView orderView = orderSerivce.getOrder(id);
+        System.out.println(orderView);
+        return orderView;
+    }
+
     @DeleteMapping("/delete/{id}")
     public String deleteOrder(@PathVariable Long id) {
         return orderSerivce.deleteOrder(id);
+    }
+
+    @RequestMapping(value = "/put/{id}", method = RequestMethod.PUT)
+    public String updateUser(@PathVariable Long id, @RequestBody OrderView inpuOrder) {
+        return orderSerivce.updateOrder(id, inpuOrder);
     }
 
     @PostMapping("/match")

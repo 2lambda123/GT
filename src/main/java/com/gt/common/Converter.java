@@ -11,12 +11,14 @@ public class Converter {
 		order.setId(orderView.getId());
 		order.setSymbol(orderView.getSymbol());
 		order.setQuantity(orderView.getQuantity());
+		order.setPrice(orderView.getPrice());
 	}
 	
 	public static void dataToViewModelConverter(OrderView viewModel, OrderData dataModel) {
 		viewModel.setId(dataModel.getId());
 		viewModel.setSymbol(dataModel.getSymbol());
 		viewModel.setQuantity(dataModel.getQuantity());
+		viewModel.setPrice(dataModel.getPrice());
 	}
 
 	public static void dataToViewModelConverterForList(List<OrderView> viewModel, List<OrderData> dataModel) {
@@ -25,6 +27,10 @@ public class Converter {
 			dataToViewModelConverter(orderView,dataModel.get(i));
 			viewModel.add(orderView);
 		}
+	}
+
+	public static void dataToViewModelConverterForSingleOrder(OrderView viewModel, OrderData dataModel) {
+		dataToViewModelConverter(viewModel, dataModel);
 	}
 
 }
