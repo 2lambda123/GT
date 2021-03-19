@@ -3,6 +3,7 @@ package com.gt.controller;
 import com.gt.enigma.Engine;
 import com.gt.model.view.OrderView;
 import com.gt.service.OrderService;
+import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@Log
 @CrossOrigin
 @RestController
 @RequestMapping("order")
@@ -37,14 +39,18 @@ public class OrderController {
     @PostMapping("/add")
     public ResponseEntity<?> addOrder(@RequestBody OrderView order) {
         boolean didProcess = engine.processOrder(order);
-        System.out.println("It processed correctly: " + didProcess);
+        log.info("It processed correctly: " + didProcess);
+        String matchOutput = engine.matchOrder(order);
+        log.info(matchOutput);
         boolean success = orderSerivce.save(order);
-        System.out.println("It saved in the database: " + success);
+        log.info("It saved in the database: " + success);
         if (didProcess && success) {
-            System.out.println("SUCCESS!!!");
+            log.info("Added order. Logging engine values: \n");
+            log.info("\n" + engine.displayValuesOfEngine());
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
-        System.out.println("Failed!!!");
+        log.severe("Failed to add order. Logging engine values: \n");
+        log.severe(engine.displayValuesOfEngine());
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 

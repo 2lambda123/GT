@@ -1,11 +1,9 @@
 <script>
-    import { onMount } from "svelte";
-
-    const apiURL = "http://localhost:8084/order/all";
-    const inputData = {"symbol":"lulu","quantity":500};
     const inputDataToMatch = {"symbol":"lulu","quantity":500};
 
     let idToDelete = 0;
+
+    let orderToAdd = {symbol:"",side:"buy",quantity:0,price:0};
 
     let outputData = [];
 
@@ -26,7 +24,7 @@
       const { hostname: location } = window.location;
        const settings = {
          method: 'POST',
-         body: JSON.stringify(inputData),
+         body: JSON.stringify(orderToAdd),
          headers: {
            'Accept': 'application/json',
            'Content-Type': 'application/json',
@@ -39,6 +37,7 @@
        try {
          const data = await response.data;
          console.log(data);
+         getAllOrders();
        } catch (err) {
          throw err;
        }
@@ -61,6 +60,7 @@
        try {
          const data = await response.data;
          console.log(data);
+         getAllOrders();
        } catch (err) {
          throw err;
        }
@@ -78,6 +78,7 @@
        try {
          const data = await response.data;
          console.log(data);
+         getAllOrders();
        } catch (err) {
          throw err;
        }
@@ -89,25 +90,30 @@
     Get All Orders
   </button>
 
-<button on:click={addOrder}>
-	Add An Order
-</button>
+  <p>{orderToAdd.id} -> {orderToAdd.symbol} {orderToAdd.side} {orderToAdd.quantity} @ {orderToAdd.price}</p>
 
-<button on:click={matchOrder}>
-	Match An Order
-</button>
+  <label><input type=radio bind:group={orderToAdd.side} value={"buy"}> Buy</label>
+  <label><input type=radio bind:group={orderToAdd.side} value={"sell"}> Sell</label>
+  <input bind:value={orderToAdd.symbol} placeholder="Symbol">
+  <input bind:value={orderToAdd.quantity} placeholder="Quantity">
+  <input bind:value={orderToAdd.price} placeholder="Price">
+  <button on:click={addOrder}>
+	  Add An Order
+  </button>
 
-<input bind:value={idToDelete} placeholder="Order ID #">
-<button on:click={deleteOrder}>
-	Delete Order #{idToDelete}
-</button>
+  <button on:click={matchOrder}>
+	  Match An Order
+  </button>
 
-{#each outputData as item }
+  <input bind:value={idToDelete} placeholder="Order ID #">
+  <button on:click={deleteOrder}>
+	  Delete Order #{idToDelete}
+  </button>
+
+  {#each outputData as item }
     <div>
-        <p> {item.id} </p>
-        <p> {item.symbol} </p>
-        <p> {item.quantity} </p>
-        <p> --------------- </p>
+      <p> {item.id} -> {item.symbol} {item.side} {item.quantity} @ {item.price}</p>
+      <p> --------------- </p>
     </div>
-{/each}
+  {/each}
 </main>
