@@ -1,6 +1,6 @@
-package com.gt.repository;
+package com.gt.sokovia.repository;
 
-import com.gt.model.data.OrderData;
+import com.gt.common.data.OrderData;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 

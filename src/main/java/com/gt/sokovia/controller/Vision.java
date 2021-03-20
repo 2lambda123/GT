@@ -1,8 +1,8 @@
-package com.gt.controller;
+package com.gt.sokovia.controller;
 
-import com.gt.enigma.Thor;
-import com.gt.model.view.OrderView;
-import com.gt.service.Wanda;
+import com.gt.asgard.Thor;
+import com.gt.common.view.OrderView;
+import com.gt.sokovia.service.Wanda;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
