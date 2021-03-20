@@ -22,3 +22,13 @@ Run these commands one by one into cmd/terminal/shell.
 * Run docker compose: `docker-compose up --build -d`
 * Visit app at [http://localhost:8084](http://localhost:8084) from browser, explore endpoints using `Postman`.
 * To stop all services: `docker-compose down`
+
+## The Names of Important Files are Denoted by Marvel Characters and Important Packages by Marvel Places
+* Asgard -- The Main Booking engine
+    * Loki does pre processing
+    * Thor is does the actual processing
+    * Heimdall does post processing
+* Sokovia -- The Database Service
+    * Wanda has all the logic to deal with the database actions (service)
+    * Vision is gateway to Wanda (controller)
+    * Pietro helps Wanda -- not as strong logic wise -- but is essential for the database logic to work properly

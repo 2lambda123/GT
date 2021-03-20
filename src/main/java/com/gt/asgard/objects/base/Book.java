@@ -1,7 +1,7 @@
-package com.gt.enigma.objects.base;
+package com.gt.asgard.objects.base;
 
-import com.gt.enigma.enums.BookType;
-import com.gt.model.view.OrderView;
+import com.gt.asgard.enums.BookType;
+import com.gt.common.view.OrderView;
 
 import java.util.*;
 

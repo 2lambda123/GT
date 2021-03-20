@@ -1,8 +1,8 @@
-package com.gt.enigma;
+package com.gt.asgard;
 
-import com.gt.enigma.preprocess.Loki;
-import com.gt.enigma.preprocess.ValidationObject;
-import com.gt.model.view.OrderView;
+import com.gt.asgard.preprocess.Loki;
+import com.gt.asgard.objects.children.ValidationObject;
+import com.gt.common.view.OrderView;
 
 public class Valkyrie {
 

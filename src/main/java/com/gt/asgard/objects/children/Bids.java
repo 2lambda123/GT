@@ -1,7 +1,7 @@
-package com.gt.enigma.objects.children;
+package com.gt.asgard.objects.children;
 
-import com.gt.enigma.objects.base.Book;
-import com.gt.enigma.enums.BookType;
+import com.gt.asgard.objects.base.Book;
+import com.gt.asgard.enums.BookType;
 
 public class Bids extends Book {
     public Bids() {

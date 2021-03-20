@@ -2,8 +2,8 @@ package com.gt.common;
 
 import java.util.List;
 
-import com.gt.model.data.OrderData;
-import com.gt.model.view.OrderView;
+import com.gt.common.data.OrderData;
+import com.gt.common.view.OrderView;
 
 public class Converter {
 

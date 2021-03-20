@@ -1,4 +1,4 @@
-package com.gt.model.data;
+package com.gt.common.data;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

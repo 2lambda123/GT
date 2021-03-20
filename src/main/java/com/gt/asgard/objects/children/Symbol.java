@@ -1,6 +1,6 @@
-package com.gt.enigma.objects.children;
+package com.gt.asgard.objects.children;
 
-import com.gt.enigma.objects.base.Book;
+import com.gt.asgard.objects.base.Book;
 
 public class Symbol {
 

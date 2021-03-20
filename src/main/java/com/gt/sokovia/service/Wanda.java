@@ -1,9 +1,9 @@
-package com.gt.service;
+package com.gt.sokovia.service;
 
 import com.gt.common.Converter;
-import com.gt.model.data.OrderData;
-import com.gt.model.view.OrderView;
-import com.gt.repository.OrderRepository;
+import com.gt.common.data.OrderData;
+import com.gt.common.view.OrderView;
+import com.gt.sokovia.repository.Pietro;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,9 +12,9 @@ import java.util.List;
 @Service
 public class Wanda {
 
-    private OrderRepository orderRepository;
+    private Pietro orderRepository;
 
-    public Wanda(OrderRepository orderRepository) {
+    public Wanda(Pietro orderRepository) {
         this.orderRepository = orderRepository;
     }
 

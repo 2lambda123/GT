@@ -1,4 +1,4 @@
-package com.gt.model.view;
+package com.gt.common.view;
 
 import java.util.Objects;
 

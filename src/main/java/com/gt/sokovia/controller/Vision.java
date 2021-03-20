@@ -15,14 +15,14 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("order")
-public class Pietro {
+public class Vision {
 
     @Autowired
     Wanda orderSerivce;
 
     Thor engine;
 
-    public Pietro() {
+    public Vision() {
         engine = new Thor();
     }
 

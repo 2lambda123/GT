@@ -1,4 +1,4 @@
-package com.gt.enigma.enums;
+package com.gt.asgard.enums;
 
 public enum BookType {
     BID,
