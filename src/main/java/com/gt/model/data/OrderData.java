@@ -26,6 +26,10 @@ public class OrderData {
     @Column(name = "PRICE")
     private Double price;
 
+    @NotNull
+    @Column(name = "SIDE")
+    private String side;
+
     public Long getId() {
         return id;
     }
@@ -36,6 +40,7 @@ public class OrderData {
         return symbol;
     }
     public Double getPrice() { return price; }
+    public String getSide() { return side; }
 
     public void setId(Long id) {
         this.id = id;
@@ -47,33 +52,35 @@ public class OrderData {
         this.symbol = symbol;
     }
     public void setPrice(Double price) { this.price = price; }
+    public void setSide(String side) { this.side = side; }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         OrderData order = (OrderData) o;
-        return id.equals(order.id) && symbol.equals(order.symbol) && quantity.equals(order.quantity) && price.equals(order.price);
+        return id.equals(order.id) && symbol.equals(order.symbol) && quantity.equals(order.quantity) && price.equals(order.price) && side.equals(order.side);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, symbol, quantity, price);
+        return Objects.hash(id, symbol, quantity, price, side);
     }
 
     public OrderData() {}
 
-    public OrderData(Long id, @NotNull String symbol, @NotNull Long quantity, @NotNull Double price) {
+    public OrderData(Long id, @NotNull String symbol, @NotNull Long quantity, @NotNull Double price, @NotNull String side) {
         this.id = id;
         this.symbol = symbol;
         this.quantity = quantity;
         this.price = price;
+        this.side = side;
     }
 
 
     @Override
     public String toString() {
-        return "Order [id=" + this.id + ", symbol=" + this.symbol + ", quantity=" + this.quantity + ", price=" + this.price + "]";
+        return "Order [id=" + this.id + ", symbol=" + this.symbol + ", quantity=" + this.quantity + ", price=" + this.price + ", side=" + this.side + "]";
     }
 
 }

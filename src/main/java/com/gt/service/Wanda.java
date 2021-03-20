@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class OrderService {
+public class Wanda {
 
     private OrderRepository orderRepository;
 
-    public OrderService(OrderRepository orderRepository) {
+    public Wanda(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
     }
 

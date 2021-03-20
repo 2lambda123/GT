@@ -1,25 +1,76 @@
-package com.gt.enigma;
+package com.gt.enigma.objects.base;
 
+import com.gt.enigma.enums.BookType;
 import com.gt.model.view.OrderView;
 
 import java.util.*;
 
-public class Engine {
+public abstract class Book {
+    public BookType bookType;
 
-    public double amountAvailable = 0;
+    private double amountAvailable = 0;
+    private TreeMap<Double, Long> availablePerPrice;
+    private Map<Double, List<OrderView>> ordersPerPrice;
+    private List<OrderView> completedOrders;
 
-    public TreeMap<Double, Long> availablePerPrice = new TreeMap<>(Collections.reverseOrder());;
-    public Map<Double, List<OrderView>> ordersPerPrice = new HashMap<>();
+    public BookType getBookType() {
+        return bookType;
+    }
 
-    public List<OrderView> completedOrders = new ArrayList<>();
+    public void setBookType(BookType bookType) {
+        this.bookType = bookType;
+    }
 
-    public String displayValuesOfEngine() {
+    public double getAmountAvailable() {
+        return amountAvailable;
+    }
+
+    public void setAmountAvailable(double amountAvailable) {
+        this.amountAvailable = amountAvailable;
+    }
+
+    public TreeMap<Double, Long> getAvailablePerPrice() {
+        return availablePerPrice;
+    }
+
+    public void setAvailablePerPrice(TreeMap<Double, Long> availablePerPrice) {
+        this.availablePerPrice = availablePerPrice;
+    }
+
+    public Map<Double, List<OrderView>> getOrdersPerPrice() {
+        return ordersPerPrice;
+    }
+
+    public void setOrdersPerPrice(Map<Double, List<OrderView>> ordersPerPrice) {
+        this.ordersPerPrice = ordersPerPrice;
+    }
+
+    public List<OrderView> getCompletedOrders() {
+        return completedOrders;
+    }
+
+    public void setCompletedOrders(List<OrderView> completedOrders) {
+        this.completedOrders = completedOrders;
+    }
+
+    public Book(BookType bookType) {
+        this.bookType = bookType;
+        if (bookType == BookType.BID) {
+            this.availablePerPrice = new TreeMap<>(Collections.reverseOrder());
+        } else {
+            this.availablePerPrice = new TreeMap<>();
+        }
+        this.ordersPerPrice = new HashMap<>();
+        this.completedOrders = new ArrayList<>();
+    }
+
+    public String displayValueOfBook() {
         StringBuilder sb = new StringBuilder();
         sb.append("----------------------------------\n");
-        sb.append("Total Available          -> " + this.amountAvailable + "\n");
-        sb.append("Available Per Price Size -> " + listAvailablePerPrice() + "\n");
-        sb.append("Orders Per Price Size    -> " + listOrdersPerPrice() + "\n");
-        sb.append("Completed Orders Size    -> " + listCompletedOrders() + "\n");
+        sb.append("Total Available      -> " + this.amountAvailable + "\n");
+        sb.append("Available Per Price  -> " + listAvailablePerPrice() + "\n");
+        sb.append("Orders Per Price     -> " + listOrdersPerPrice() + "\n");
+        sb.append("Completed Orders:" + listCompletedOrders() + "\n");
         sb.append("----------------------------------");
         return sb.toString();
     }
@@ -28,7 +79,7 @@ public class Engine {
         StringBuilder output = new StringBuilder();
         for (double price : availablePerPrice.keySet()) {
             long amount = availablePerPrice.get(price);
-            output.append(" [").append(price).append(" -> ").append(amount).append("],");
+            output.append("[").append(price).append(" -> ").append(amount).append("],");
         }
         return output.toString();
     }
@@ -37,7 +88,7 @@ public class Engine {
         StringBuilder output = new StringBuilder();
         for (double price : ordersPerPrice.keySet()) {
             int size = ordersPerPrice.get(price).size();
-            output.append(" [").append(price).append(" -> ").append(size).append("],");
+            output.append("[").append(price).append(" -> ").append(size).append("], ");
         }
         return output.toString();
     }
@@ -45,12 +96,12 @@ public class Engine {
     private String listCompletedOrders() {
         StringBuilder output = new StringBuilder();
         for (OrderView order : completedOrders) {
-            output.append(order.toString());
+            output.append("\n").append(order.toString());
         }
         return output.toString();
     }
 
-    public boolean processOrder(OrderView order) {
+    public boolean addOrder(OrderView order) {
         addOrderToCache(order);
         increaseAmountAvailablePerPrice(order.getPrice(), order.getQuantity());
         increaseAmountAvailable(order);
@@ -67,30 +118,8 @@ public class Engine {
         return true;
     }
 
-    public String matchOrder(OrderView incomingOrder) {
-        Set<Double> prices = findTheBestPricesToFillWith(incomingOrder);
-        return "The prices that we are looking at -> " + Arrays.toString(prices.toArray());
-    }
-
-    public Set<Double> findTheBestPricesToFillWith(OrderView order) {
-        if (amountAvailable < order.getQuantity()) {
-            return new HashSet<>();
-        } else {
-            long toBeFilled = order.getQuantity();
-            Set<Double> prices = new HashSet<>();
-            for (Map.Entry<Double, Long> entry : availablePerPrice.entrySet()) {
-                if (toBeFilled == 0) return prices;
-                if (entry.getValue() > 0) {
-                    if (toBeFilled <= entry.getValue()) {
-                        toBeFilled = 0;
-                    } else {
-                        toBeFilled -= entry.getValue();
-                    }
-                    prices.add(entry.getKey());
-                }
-            }
-            return prices;
-        }
+    public void addToCompletedOrders(OrderView order) {
+        this.completedOrders.add(order);
     }
 
     private void addOrderToCache(OrderView order) {

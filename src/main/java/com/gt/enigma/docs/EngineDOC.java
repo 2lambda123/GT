@@ -1,4 +1,4 @@
-package com.gt.enigma;
+package com.gt.enigma.docs;
 
 public class EngineDOC {
 /**

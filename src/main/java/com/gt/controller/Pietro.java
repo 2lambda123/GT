@@ -1,8 +1,8 @@
 package com.gt.controller;
 
-import com.gt.enigma.Engine;
+import com.gt.enigma.Thor;
 import com.gt.model.view.OrderView;
-import com.gt.service.OrderService;
+import com.gt.service.Wanda;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,15 +15,15 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("order")
-public class OrderController {
+public class Pietro {
 
     @Autowired
-    OrderService orderSerivce;
+    Wanda orderSerivce;
 
-    Engine engine;
+    Thor engine;
 
-    public OrderController() {
-        engine = new Engine();
+    public Pietro() {
+        engine = new Thor();
     }
 
     @GetMapping("/all")
@@ -38,19 +38,15 @@ public class OrderController {
 
     @PostMapping("/add")
     public ResponseEntity<?> addOrder(@RequestBody OrderView order) {
-        boolean didProcess = engine.processOrder(order);
-        log.info("It processed correctly: " + didProcess);
-        String matchOutput = engine.matchOrder(order);
-        log.info(matchOutput);
+        engine.acceptOrder(order);
+        log.info("Thor processed the order...");
         boolean success = orderSerivce.save(order);
         log.info("It saved in the database: " + success);
-        if (didProcess && success) {
+        if (success) {
             log.info("Added order. Logging engine values: \n");
-            log.info("\n" + engine.displayValuesOfEngine());
             return new ResponseEntity<>(HttpStatus.CREATED);
         }
         log.severe("Failed to add order. Logging engine values: \n");
-        log.severe(engine.displayValuesOfEngine());
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
