@@ -13,13 +13,13 @@ public class Valkyrie {
         Valkyrie test = new Valkyrie();
         long start = System.nanoTime();
         for (long i = 0; i < 1; i++) {
-            OrderView buyOrder = new OrderView(i, "spx", 200L, 10.0, "buy");
+            OrderView buyOrder = new OrderView(i, "spx", 20L, 10.0, "sell");
             ValidationObject validationObject = test.validator.validate(buyOrder);
             if (validationObject.containsErrors()) throw new Exception("Bad order due to -> " + validationObject.errorsToString());
             test.engine.acceptOrder(buyOrder);
         }
-        for (long i = 0; i < 1; i++) {
-            OrderView sellOrder = new OrderView(i, "spx", 100L, 10.0, "sell");
+        for (long i = 1; i < 3; i++) {
+            OrderView sellOrder = new OrderView(i, "spx", 10L, 10.0, "buy");
             ValidationObject validationObject = test.validator.validate(sellOrder);
             if (validationObject.containsErrors()) throw new Exception("Bad order due to -> " + validationObject.errorsToString());
             test.engine.acceptOrder(sellOrder);

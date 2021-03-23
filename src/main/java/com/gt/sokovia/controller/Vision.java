@@ -38,7 +38,7 @@ public class Vision {
 
     @PostMapping("/add")
     public ResponseEntity<?> addOrder(@RequestBody OrderView order) {
-        engine.acceptOrder(order);
+//        engine.acceptOrder(order);
         log.info("Thor processed the order...");
         boolean success = orderSerivce.save(order);
         log.info("It saved in the database: " + success);

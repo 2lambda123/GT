@@ -8,6 +8,7 @@ public class OrderView {
     private Long quantity;
     private Double price;
     private String side;
+    private Long quantityRemaining;
 
     public Long getId() {
         return id;
@@ -20,6 +21,7 @@ public class OrderView {
     }
     public Double getPrice() { return price; }
     public String getSide() { return side; }
+    public Long getQuantityRemaining() { return quantityRemaining; }
 
     public void setId(Long id) {
         this.id = id;
@@ -32,6 +34,7 @@ public class OrderView {
     }
     public void setPrice(Double price) { this.price = price; }
     public void setSide(String side) { this.side = side; }
+    public void setQuantityRemaining(Long quantityRemaining) { this.quantityRemaining = quantityRemaining; }
 
     public OrderView() {}
 
@@ -41,6 +44,7 @@ public class OrderView {
         this.quantity = quantity;
         this.price = price;
         this.side = side;
+        this.quantityRemaining = quantity;
     }
 
     @Override
@@ -58,6 +62,8 @@ public class OrderView {
 
     @Override
     public String toString() {
-        return "OrderView [id=" + this.id + ", symbol=" + this.symbol + ", quantity=" + this.quantity + ", price=" + this.price + ", side=" + this.side + "]";
+        return "OrderView [id=" + this.id + ", symbol=" + this.symbol +
+                ", quantity=" + this.quantity + ", price=" + this.price +
+                ", side=" + this.side + ", remaining quantity=" + this.quantityRemaining + "]";
     }
 }
