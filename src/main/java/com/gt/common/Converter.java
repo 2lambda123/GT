@@ -2,10 +2,20 @@ package com.gt.common;
 
 import java.util.List;
 
+import com.gt.common.api.OrderRequest;
 import com.gt.common.data.OrderData;
 import com.gt.common.view.OrderView;
 
 public class Converter {
+
+	public static void requestToDataConverter(OrderRequest request, OrderData order) {
+		order.setId(null);
+		order.setSymbol(request.getSymbol());
+		order.setQuantity(request.getQuantity());
+		order.setPrice(request.getPrice());
+		order.setSide(request.getSide());
+		order.setQuantityRemaining(request.getQuantity());
+	}
 
 	public static void viewToDataModelConverter(OrderView orderView, OrderData order) {
 		order.setId(orderView.getId());

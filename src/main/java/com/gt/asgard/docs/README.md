@@ -21,3 +21,10 @@ Current Design (03/20/2021)
     * It seems that when it constantly gets matched, (e.g. One buy comes in and one sell comes in right after another) -- it is extremely fast.
     * However, if only nothing gets matched and one side gets built up, then it dramatically slows down (1 million for both took 79 seconds)
     * Need to figure out the bottleneck or what can be done to improve that speed
+
+Current Design (03/24/2021)
+
+1. Now uses the "Tesseract" cache
+2. Separation of duties between the engine and cache
+3. Now has Loki pre processing messages
+4. Currently implementing Heimdall's logic

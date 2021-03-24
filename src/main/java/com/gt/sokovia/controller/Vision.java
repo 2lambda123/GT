@@ -64,7 +64,7 @@ public class Vision {
 
     @RequestMapping(value = "/put/{id}", method = RequestMethod.PUT)
     public String updateUser(@PathVariable Long id, @RequestBody OrderView inpuOrder) {
-        return orderSerivce.updateOrder(id, inpuOrder);
+        return orderSerivce.updateOrder(inpuOrder);
     }
 
     @PostMapping("/match")

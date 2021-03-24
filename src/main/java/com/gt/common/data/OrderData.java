@@ -30,6 +30,10 @@ public class OrderData {
     @Column(name = "SIDE")
     private String side;
 
+    @NotNull
+    @Column(name = "QUANTITY_REMAINING")
+    private Long quantityRemaining;
+
     public Long getId() {
         return id;
     }
@@ -41,6 +45,7 @@ public class OrderData {
     }
     public Double getPrice() { return price; }
     public String getSide() { return side; }
+    public Long getQuantityRemaining() { return quantityRemaining; }
 
     public void setId(Long id) {
         this.id = id;
@@ -53,34 +58,47 @@ public class OrderData {
     }
     public void setPrice(Double price) { this.price = price; }
     public void setSide(String side) { this.side = side; }
+    public void setQuantityRemaining(Long quantityRemaining) { this.quantityRemaining = quantityRemaining; }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        OrderData order = (OrderData) o;
-        return id.equals(order.id) && symbol.equals(order.symbol) && quantity.equals(order.quantity) && price.equals(order.price) && side.equals(order.side);
+        OrderData orderData = (OrderData) o;
+        return Objects.equals(id, orderData.id) && Objects.equals(symbol, orderData.symbol)
+                && Objects.equals(quantity, orderData.quantity) && Objects.equals(price, orderData.price)
+                && Objects.equals(side, orderData.side) && Objects.equals(quantityRemaining, orderData.quantityRemaining);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, symbol, quantity, price, side);
+        return Objects.hash(id, symbol, quantity, price, side, quantityRemaining);
     }
 
     public OrderData() {}
 
-    public OrderData(Long id, @NotNull String symbol, @NotNull Long quantity, @NotNull Double price, @NotNull String side) {
+    public OrderData(@NotNull String symbol, @NotNull Long quantity, @NotNull Double price, @NotNull String side, @NotNull Long quantityRemaining) {
+        this.symbol = symbol;
+        this.quantity = quantity;
+        this.price = price;
+        this.side = side;
+        this.quantityRemaining = quantityRemaining;
+    }
+
+    public OrderData(@NotNull Long id, @NotNull String symbol, @NotNull Long quantity, @NotNull Double price, @NotNull String side, @NotNull Long quantityRemaining) {
         this.id = id;
         this.symbol = symbol;
         this.quantity = quantity;
         this.price = price;
         this.side = side;
+        this.quantityRemaining = quantityRemaining;
     }
-
 
     @Override
     public String toString() {
-        return "Order [id=" + this.id + ", symbol=" + this.symbol + ", quantity=" + this.quantity + ", price=" + this.price + ", side=" + this.side + "]";
+        return "Order [id=" + this.id + ", symbol=" + this.symbol +
+                ", quantity=" + this.quantity + ", price=" + this.price +
+                ", side=" + this.side + ", quantity remaining=" + this.quantityRemaining + "]";
     }
 
 }

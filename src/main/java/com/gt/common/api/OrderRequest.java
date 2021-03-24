@@ -1,20 +1,14 @@
-package com.gt.common.view;
-
-import com.gt.common.api.OrderRequest;
+package com.gt.common.api;
 
 import java.util.Objects;
 
-public class OrderView {
-    private Long id;
+public class OrderRequest {
+
     private String symbol;
     private Long quantity;
     private Double price;
     private String side;
-    private Long quantityRemaining;
 
-    public Long getId() {
-        return id;
-    }
     public Long getQuantity() {
         return quantity;
     }
@@ -23,11 +17,7 @@ public class OrderView {
     }
     public Double getPrice() { return price; }
     public String getSide() { return side; }
-    public Long getQuantityRemaining() { return quantityRemaining; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
     public void setQuantity(Long quantity) {
         this.quantity = quantity;
     }
@@ -36,36 +26,34 @@ public class OrderView {
     }
     public void setPrice(Double price) { this.price = price; }
     public void setSide(String side) { this.side = side; }
-    public void setQuantityRemaining(Long quantityRemaining) { this.quantityRemaining = quantityRemaining; }
 
-    public OrderView() {}
+    public OrderRequest() {}
 
-    public OrderView(Long id, String symbol, Long quantity, Double price, String side) {
-        this.id = id;
+    public OrderRequest(String symbol, Long quantity, Double price, String side) {
         this.symbol = symbol;
         this.quantity = quantity;
         this.price = price;
         this.side = side;
-        this.quantityRemaining = quantity;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        OrderView orderView = (OrderView) o;
-        return Objects.equals(id, orderView.id);
+        OrderRequest that = (OrderRequest) o;
+        return Objects.equals(symbol, that.symbol) && Objects.equals(quantity, that.quantity) && Objects.equals(price, that.price) && Objects.equals(side, that.side);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id);
+        return Objects.hash(symbol, quantity, price, side);
     }
 
     @Override
     public String toString() {
-        return "OrderView [id=" + this.id + ", symbol=" + this.symbol +
+        return "OrderRequest [symbol=" + this.symbol +
                 ", quantity=" + this.quantity + ", price=" + this.price +
-                ", side=" + this.side + ", remaining quantity=" + this.quantityRemaining + "]";
+                ", side=" + this.side + "]";
     }
+
 }

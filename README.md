@@ -32,3 +32,7 @@ Run these commands one by one into cmd/terminal/shell.
     * Wanda has all the logic to deal with the database actions (service)
     * Vision is gateway to Wanda (controller)
     * Pietro helps Wanda -- not as strong logic wise -- but is essential for the database logic to work properly
+  
+## Architecture
+
+Client -> Load Balancer -> Loki -> Reverse Proxy -> Thor -> Heimdall -> Client

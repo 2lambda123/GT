@@ -5,24 +5,12 @@ import java.util.List;
 
 public class ValidationObject {
 
-    private long orderId;
     private boolean isFullyValidated;
     private List<String> errors;
 
     public ValidationObject() {
-        this.orderId = -1;
         this.isFullyValidated = false;
         this.errors = new ArrayList<>();
-    }
-
-    public ValidationObject(long orderId) {
-        this.orderId = orderId;
-        this.isFullyValidated = false;
-        this.errors = new ArrayList<>();
-    }
-
-    public long getOrderId() {
-        return orderId;
     }
 
     public boolean isFullyValidated() {
@@ -31,10 +19,6 @@ public class ValidationObject {
 
     public List<String> getErrors() {
         return errors;
-    }
-
-    public void setOrderId(long orderId) {
-        this.orderId = orderId;
     }
 
     public void setFullyValidated(boolean fullyValidated) {

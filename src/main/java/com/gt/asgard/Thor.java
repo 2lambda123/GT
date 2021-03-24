@@ -1,6 +1,7 @@
 package com.gt.asgard;
 
 import com.gt.asgard.objects.base.Book;
+import com.gt.asgard.objects.children.MatchOutput;
 import com.gt.asgard.objects.children.Symbol;
 import com.gt.common.view.OrderView;
 
@@ -8,7 +9,7 @@ import java.util.*;
 
 public class Thor {
 
-    boolean debug = true;
+    boolean debug = false;
 
     Map<String, Symbol> symbols;
 
@@ -16,26 +17,31 @@ public class Thor {
         symbols = new HashMap<>();
     }
 
-    public void acceptOrder(OrderView order) throws Exception {
+    public OrderView acceptOrder(OrderView order) throws Exception {
+        long start = System.nanoTime();
         Symbol symbol = retrieveOrderSymbol(order.getSymbol());
+        long originalQuantity = order.getQuantityRemaining();
         if (order.getSide().equals("buy")) {
             symbol.bids.addOrder(order);
+            start = System.nanoTime();
             MatchOutput matchOutput = matchOrder(order, symbol.asks);
             if (matchOutput.isFullyMatch()) {
                 if (debug) System.out.println("The buy order was fully matched!");
                 symbol.bids.removeOrder(matchOutput.getModifiedOrder().getId());
             } else {
                 if (debug) System.out.println("The buy order was partially matched!");
-//                symbol.bids.updateOrder(matchOutput.getModifiedOrder());
+                symbol.bids.updateOrder(matchOutput.getModifiedOrder(), originalQuantity - order.getQuantityRemaining());
             }
         } else {
             symbol.asks.addOrder(order);
-//            OrderView incomingOrder = matchOrder(order, symbol.bids);
-//            if (incomingOrder.getQuantity() > 0) {
-//                symbol.asks.addOrder(incomingOrder);
-//            } else {
-//                if (debug) System.out.println("The sell order was fully matched!");
-//            }
+            MatchOutput matchOutput = matchOrder(order, symbol.bids);
+            if (matchOutput.isFullyMatch()) {
+                if (debug) System.out.println("The buy order was fully matched!");
+                symbol.asks.removeOrder(matchOutput.getModifiedOrder().getId());
+            } else {
+                if (debug) System.out.println("The buy order was partially matched!");
+                symbol.asks.updateOrder(matchOutput.getModifiedOrder(), originalQuantity - order.getQuantityRemaining());
+            }
         }
         if (debug) {
             System.out.println("----------------------------------");
@@ -43,8 +49,16 @@ public class Thor {
             System.out.println(symbol.bids.displayValueOfBook());
             System.out.println("     ----- " + symbol.underlier + "'s Asks -----");
             System.out.println(symbol.asks.displayValueOfBook());
+            long end = System.nanoTime();
+            System.out.println((double) (end - start) / 1_000_000_000.0);
         }
+        return order;
     }
+
+    /*
+    TODO: Implement cancel
+     */
+    public void cancelOrder(long orderID) {}
 
     private Symbol retrieveOrderSymbol(String symbol) {
         if (!symbols.containsKey(symbol)) {
@@ -54,6 +68,7 @@ public class Thor {
     }
 
     private MatchOutput matchOrder(OrderView incomingOrder, Book book) throws Exception {
+        long start = System.nanoTime();
         Set<Double> bestPricesToFillWith = findTheBestPricesToFillWith(incomingOrder, book);
         if (debug) System.out.println("The prices that we are looking at -> " + Arrays.toString(bestPricesToFillWith.toArray()));
         for (double price : bestPricesToFillWith) {
@@ -66,33 +81,44 @@ public class Thor {
                 if (incomingOrder.getQuantity().equals(existingOrder.getQuantityRemaining())) {
                     book.tesseract.remove(existingOrder.getId());
 
+                    long end = System.nanoTime();
+                    double seconds = (double) (end - start) / 1_000_000_000.0;
+                    if (incomingOrder.getId() > 999_999 && incomingOrder.getId() % 100_000 == 0) {
+                        System.out.println("Matching time (start): " + seconds);
+                    }
                     return new MatchOutput(true, incomingOrder);
-                } else if (incomingOrder.getQuantity() < existingOrder.getQuantityRemaining()) {
-                    long quantityChanging = incomingOrder.getQuantity();
+                } else if (incomingOrder.getQuantityRemaining() < existingOrder.getQuantityRemaining()) {
+                    long quantityChanging = incomingOrder.getQuantityRemaining();
 
                     existingOrder.setQuantityRemaining(existingOrder.getQuantityRemaining() - quantityChanging);
 
                     book.tesseract.update(existingOrder, quantityChanging);
 
+                    long end = System.nanoTime();
+                    double seconds = (double) (end - start) / 1_000_000_000.0;
+                    if (incomingOrder.getId() > 999_999 && incomingOrder.getId() % 100_000 == 0) {
+                        System.out.println("Matching time (middle): " + seconds);
+                    }
                     return new MatchOutput(true, incomingOrder);
-//                } else {
-//                    fillExistingOrder(existingOrder, book);
-//                    existingOrdersFilled.add(existingOrder);
-//                    incomingOrder.setQuantity(incomingOrder.getQuantity() - existingOrder.getQuantity());
+                } else {
+                    long quantityChanging = existingOrder.getQuantityRemaining();
+
+                    book.tesseract.remove(existingOrder.getId());
+
+                    incomingOrder.setQuantityRemaining(incomingOrder.getQuantityRemaining() - quantityChanging);
                 }
             }
         }
-//        for (OrderView order : existingOrdersFilled) {
-//            double price = order.getPrice();
-//            book.getOrdersPerPrice().get(price).remove(order);
-//            if (book.getOrdersPerPrice().get(price).size() == 0) {
-//                book.getOrdersPerPrice().remove(price);
-//            }
-//        }
+        long end = System.nanoTime();
+        double seconds = (double) (end - start) / 1_000_000_000.0;
+        if (incomingOrder.getId() > 999_999 && incomingOrder.getId() % 100_000 == 0) {
+            System.out.println("Matching time (end): " + seconds);
+        }
         return new MatchOutput(false, incomingOrder);
     }
 
     private Set<Double> findTheBestPricesToFillWith(OrderView order, Book book) {
+        long start = System.nanoTime();
         if (book.tesseract.getAmountAvailable() < order.getQuantity()) {
             return new HashSet<>();
         } else {
@@ -109,54 +135,13 @@ public class Thor {
                     prices.add(entry.getKey());
                 }
             }
+            long end = System.nanoTime();
+            double seconds = (double) (end - start) / 1_000_000_000.0;
+            if (order.getId() > 999_999 && order.getId() % 100_000 == 0) {
+                System.out.println("Finding best prices to fill with time: " + seconds);
+            }
             return prices;
         }
     }
-
-//    private void fillExistingOrder(OrderView order, Book book) {
-//        double price = order.getPrice();
-//        book.getAvailablePerPrice().put(price, (book.getAvailablePerPrice().get(price)) - order.getQuantity());
-//        if (book.getAvailablePerPrice().get(price) == 0) {
-//            book.getAvailablePerPrice().remove(price);
-//        }
-//        book.setAmountAvailable(book.getAmountAvailable() - order.getQuantity());
-//        order.setQuantity(0L);
-//        book.addToCompletedOrders(order);
-//    }
-
-//    private void updateExistingOrder(OrderView order, long numOfSharesFilled, Book book) {
-//        double price = order.getPrice();
-//        book.getAvailablePerPrice().put(price, (book.getAvailablePerPrice().get(price)) - numOfSharesFilled);
-//        int index = book.getOrdersPerPrice().get(price).indexOf(order);
-//        long quantity = book.getOrdersPerPrice().get(price).get(index).getQuantity();
-//        book.getOrdersPerPrice().get(price).get(index).setQuantity(quantity - numOfSharesFilled);
-//        book.setAmountAvailable(book.getAmountAvailable() - numOfSharesFilled);
-//    }
-
 }
 
-class MatchOutput {
-    public boolean fullyMatch;
-    public OrderView modifiedOrder;
-
-    public MatchOutput(boolean fullyMatch, OrderView modifiedOrder) {
-        this.fullyMatch = fullyMatch;
-        this.modifiedOrder = modifiedOrder;
-    }
-
-    public boolean isFullyMatch() {
-        return fullyMatch;
-    }
-
-    public void setFullyMatch(boolean fullyMatch) {
-        this.fullyMatch = fullyMatch;
-    }
-
-    public OrderView getModifiedOrder() {
-        return modifiedOrder;
-    }
-
-    public void setModifiedOrder(OrderView modifiedOrder) {
-        this.modifiedOrder = modifiedOrder;
-    }
-}

@@ -31,6 +31,7 @@ public class Tesseract implements InfinityStone {
 
     @Override
     public void add(OrderView order) throws Exception {
+        long start = System.nanoTime();
         long id = order.getId();
         double price = order.getPrice();
         long quantity = order.getQuantity();
@@ -49,10 +50,16 @@ public class Tesseract implements InfinityStone {
         numberOfSharesPerPrice.put(order.getPrice(), numberOfSharesPerPrice.getOrDefault(order.getPrice(), 0L) + quantity);
         ordersGroupedByPrice.get(order.getPrice()).put(order.getId(), order);
         amountAvailable += quantity;
+        long end = System.nanoTime();
+        double seconds = (double) (end - start) / 1_000_000_000.0;
+        if (id > 999_999 && id % 100_000 == 0) {
+            System.out.println("Add to cache time: " + seconds);
+        }
     }
 
     @Override
     public void remove(long orderID) throws Exception {
+        long start = System.nanoTime();
         if (!cache.containsKey(orderID)) {
             throw new Exception("Order does not exist, therefore it cannot be deleted");
         }
@@ -63,15 +70,33 @@ public class Tesseract implements InfinityStone {
         long quantityToRemove = order.getQuantityRemaining();
 
         order.setQuantityRemaining(0L);
+
         cache.remove(orderID);
-        numberOfSharesPerPrice.put(price, numberOfSharesPerPrice.get(price) - quantityToRemove);
         ordersGroupedByPrice.get(price).remove(orderID);
+        numberOfSharesPerPrice.put(price, numberOfSharesPerPrice.get(price) - quantityToRemove);
         amountAvailable -= quantityToRemove;
+
         completedOrders.add(order);
+
+        // Clean up -- remove keys that have no values
+        if (numberOfSharesPerPrice.get(price).equals(0L)) {
+            numberOfSharesPerPrice.remove(price);
+        }
+
+        if (ordersGroupedByPrice.get(price).size() == 0) {
+            ordersGroupedByPrice.remove(price);
+        }
+
+        long end = System.nanoTime();
+        double seconds = (double) (end - start) / 1_000_000_000.0;
+        if (orderID > 999_999 && orderID % 100_000 == 0) {
+            System.out.println("Remove from cache time: " + seconds);
+        }
     }
 
     @Override
     public void update(OrderView newOrder, long quantityChanged) throws Exception {
+        long start = System.nanoTime();
         OrderView cacheOrder = find(newOrder.getId());
 
         double cacheOrderPrice = newOrder.getPrice();
@@ -80,17 +105,30 @@ public class Tesseract implements InfinityStone {
         ordersGroupedByPrice.get(cacheOrderPrice).put(cacheOrder.getId(), newOrder);
         cache.put(cacheOrder.getId(), newOrder);
         amountAvailable -= quantityChanged;
+        long end = System.nanoTime();
+        double seconds = (double) (end - start) / 1_000_000_000.0;
+        if (cacheOrder.getId() > 999_999 && cacheOrder.getId() % 100_000 == 0) {
+            System.out.println("Update from cache time: " + seconds);
+        }
     }
 
     @Override
     public OrderView find(long orderID) throws Exception {
+        long start = System.nanoTime();
         if (!cache.containsKey(orderID)) {
             throw new Exception("OrderID does not exist. Please check if valid orderID");
         }
 
         double price = cache.get(orderID).getPrice();
+        OrderView output = ordersGroupedByPrice.get(price).get(orderID);
 
-        return ordersGroupedByPrice.get(price).get(orderID);
+        long end = System.nanoTime();
+        double seconds = (double) (end - start) / 1_000_000_000.0;
+        if (orderID > 999_999 && orderID % 100_000 == 0) {
+            System.out.println("Find from cache time: " + seconds);
+        }
+
+        return output;
     }
 
     public String listAvailablePerPrice() {

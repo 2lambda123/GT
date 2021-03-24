@@ -1,22 +1,25 @@
 package com.gt.sokovia.service;
 
 import com.gt.common.Converter;
+import com.gt.common.api.OrderRequest;
 import com.gt.common.data.OrderData;
 import com.gt.common.view.OrderView;
 import com.gt.sokovia.repository.Pietro;
+import lombok.extern.java.Log;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Log
 @Service
 public class Wanda {
 
+    @Autowired
     private Pietro orderRepository;
 
-    public Wanda(Pietro orderRepository) {
-        this.orderRepository = orderRepository;
-    }
+    public Wanda() {}
 
     public List<OrderView> findAll() {
         List<OrderView> orderViewList = new ArrayList<>();
@@ -37,6 +40,17 @@ public class Wanda {
             return true;
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    public long createNewOrder(OrderRequest request) {
+        OrderData order = new OrderData();
+        try {
+            Converter.requestToDataConverter(request, order);
+            OrderData createdOrder = orderRepository.save(order);
+            return createdOrder.getId();
+        } catch (Exception e) {
+            return -1;
         }
     }
 
@@ -71,12 +85,16 @@ public class Wanda {
         return orderFromDatabase;
     }
 
-    public String updateOrder(Long id, OrderView orderView) {
+    public String updateOrder(OrderView orderView) {
         try {
-            OrderData data = orderRepository.getOne(id);
+            log.info("Searching for this orderID in the database: " + orderView.getId());
+            OrderData data = orderRepository.getOne(orderView.getId());
+            log.info("Database data: " + data.toString());
             data.setQuantity(orderView.getQuantity());
             data.setSymbol(orderView.getSymbol());
             data.setPrice(orderView.getPrice());
+            data.setQuantityRemaining(orderView.getQuantityRemaining());
+            log.info("Updated order data: " + data.toString());
             orderRepository.save(data);
             return "Updated order!";
         } catch (Exception e) {
