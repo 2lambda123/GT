@@ -7,7 +7,6 @@ services:
     container_name: mysql-db2
     environment:
       - MYSQL_ROOT_PASSWORD=gt
-      - MYSQL_USER=root
     ports:
       - "3306:3306"
     restart: always
@@ -30,11 +29,8 @@ services:
 
   # gtExchange Spring Boot Application
   gtExchange:
-    image: gt-exchange-image
+    image: ivorytoast3853/stark
     container_name: gt-exchange-app
-    build:
-      context: .
-      dockerfile: Dockerfile
     ports:
       - "8084:8084"
     restart: always
