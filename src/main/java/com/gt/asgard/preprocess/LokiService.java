@@ -7,7 +7,10 @@ import com.gt.common.api.OrderRequest;
 import com.gt.common.view.OrderView;
 import com.gt.sokovia.service.Wanda;
 import lombok.extern.java.Log;
+import org.hibernate.criterion.Order;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
+import java.util.List;
 
 @Log
 public class LokiService {
@@ -28,7 +31,7 @@ public class LokiService {
 
     i.e. -> engine.acceptOrder() should return List<OrderView>, not just one single OrderView
      */
-    public String submitRequest(OrderRequest request) throws Exception {
+    public OrderView submitRequest(OrderRequest request) throws Exception {
         // Validate
         ValidationObject validation = validateRequest(request);
         if (validation.containsErrors()) {
@@ -39,21 +42,28 @@ public class LokiService {
         log.info("Created Order: " + order.toString());
 
         // Match
-        OrderView updatedOrder = engine.acceptOrder(order);
-        log.info("Matched Order: " + updatedOrder.toString());
+        List<OrderView> ordersToUpdate = engine.acceptOrder(order);
 
         // Update
-        return postProcessor.updateOrder(updatedOrder);
+        for (OrderView orderToUpdate : ordersToUpdate) {
+            log.info("Affected order: " + orderToUpdate.toString());
+            postProcessor.updateOrder(orderToUpdate);
+        }
+
+        return order;
     }
 
-    /*
-    TODO: Implement cancel endpoint
-     */
-    public void cancelOrder(long id) throws NotImplementedException {
-        throw new NotImplementedException();
+    public void cancelOrder(long orderID) throws Exception {
+        OrderView order = database.getOrder(orderID);
+        OrderView cancelledOrder = engine.cancelOrder(order);
+        if (cancelledOrder == null) {
+            throw new Exception("Could not cancel order on engine -- therefore, did not cancel in database");
+        } else {
+            database.updateOrder(cancelledOrder);
+        }
     }
 
-    public ValidationObject validateRequest(OrderRequest request) {
+    private ValidationObject validateRequest(OrderRequest request) {
         ValidationObject validation = new ValidationObject();
         validation = validateOrderDetails(request, validation);
         validation = validateSymbol(request, validation);

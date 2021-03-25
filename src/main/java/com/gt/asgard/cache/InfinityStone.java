@@ -15,8 +15,9 @@ public interface InfinityStone {
      *
      * Throws exception if not found
      * @param orderID -- OrderID to be removed
+     * @return
      */
-    void remove(long orderID) throws Exception;
+    OrderView remove(long orderID) throws Exception;
 
     /**
      * Updates element from cache with the details of input order

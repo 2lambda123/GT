@@ -27,10 +27,8 @@ public abstract class Book {
         this.tesseract.add(order);
     }
 
-    public boolean removeOrder(long orderID) throws Exception {
-        this.tesseract.remove(orderID);
-
-        return true;
+    public OrderView removeOrder(long orderID) throws Exception {
+        return this.tesseract.remove(orderID);
     }
 
     public void updateOrder(OrderView order, long quantityToChange) throws Exception {

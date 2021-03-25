@@ -58,7 +58,7 @@ public class Tesseract implements InfinityStone {
     }
 
     @Override
-    public void remove(long orderID) throws Exception {
+    public OrderView remove(long orderID) throws Exception {
         long start = System.nanoTime();
         if (!cache.containsKey(orderID)) {
             throw new Exception("Order does not exist, therefore it cannot be deleted");
@@ -92,6 +92,8 @@ public class Tesseract implements InfinityStone {
         if (orderID > 999_999 && orderID % 100_000 == 0) {
             System.out.println("Remove from cache time: " + seconds);
         }
+
+        return order;
     }
 
     @Override
