@@ -29,8 +29,11 @@ services:
 
   # gtExchange Spring Boot Application
   gtExchange:
-    image: ivorytoast3853/stark
+    image: gt-exchange-image
     container_name: gt-exchange-app
+    build:
+      context: .
+      dockerfile: Dockerfile
     ports:
       - "8084:8084"
     restart: always
