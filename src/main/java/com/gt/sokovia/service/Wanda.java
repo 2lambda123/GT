@@ -2,15 +2,20 @@ package com.gt.sokovia.service;
 
 import com.gt.common.Converter;
 import com.gt.common.api.OrderRequest;
+import com.gt.common.api.UserLoginRequest;
 import com.gt.common.data.OrderData;
+import com.gt.common.data.UserData;
 import com.gt.common.view.OrderView;
+import com.gt.common.view.UserView;
 import com.gt.sokovia.repository.Pietro;
+import com.gt.sokovia.repository.UsersRepository;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Log
 @Service
@@ -19,17 +24,67 @@ public class Wanda {
     @Autowired
     private Pietro orderRepository;
 
+    @Autowired
+    private UsersRepository usersRepository;
+
     public Wanda() {}
 
     public List<OrderView> findAll() {
         List<OrderView> orderViewList = new ArrayList<>();
         try {
             List<OrderData> data = orderRepository.findAll();
-            Converter.dataToViewModelConverterForList(orderViewList, data);
+            Converter.dataToViewModelConverterForOrderList(orderViewList, data);
         } catch (Exception e) {
             System.out.println("Something went wrong!");
         }
         return orderViewList;
+    }
+
+    public List<OrderView> getAllOrdersForUser(String userID) {
+        List<OrderView> orderViewList = new ArrayList<>();
+        try {
+            List<OrderData> listOfOrdersFromDatabase = orderRepository.findAll();
+            List<OrderData> userOrders = listOfOrdersFromDatabase.stream()
+                    .filter(x -> x.getUserID().equals(userID))
+                    .collect(Collectors.toList());
+            Converter.dataToViewModelConverterForOrderList(orderViewList, userOrders);
+        } catch (Exception e) {
+            System.out.println("Something went wrong!");
+        }
+        return orderViewList;
+    }
+
+    public List<UserView> getAllUsersInDatabase() {
+        List<UserView> usersList = new ArrayList<>();
+        try {
+            List<UserData> data = usersRepository.findAll();
+            Converter.dataToViewModelConverterForUserList(usersList, data);
+        } catch (Exception e) {
+            System.out.println("Something went wrong!");
+        }
+        return usersList;
+    }
+
+    public boolean isCorrectLogin(String username, String password) {
+        List<UserView> usersList = getAllUsersInDatabase();
+        for (UserView user : usersList) {
+            log.info("Comparing " + user.getUserID() + ", " + user.getPassword() + " to: " + username + " and " + password);
+            if (user.getUserID().equals(username) && user.getPassword().equals(password)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isUserInDatabase(String userID) {
+        List<UserView> usersList = getAllUsersInDatabase();
+        for (UserView user : usersList) {
+            log.info("Comparing " + user.getUserID() + ", " + user.getPassword() + " to: " + userID);
+            if (user.getUserID().equals(userID)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public boolean save(OrderView orderView) {
@@ -40,6 +95,17 @@ public class Wanda {
             return true;
         } catch (Exception e) {
             return false;
+        }
+    }
+
+    public String createNewUser(UserLoginRequest request) {
+        UserData user = new UserData();
+        try {
+            Converter.requestToDataConverter(request, user);
+            UserData createdOrder = usersRepository.save(user);
+            return createdOrder.getUserID();
+        } catch (Exception e) {
+            return "Adding new user failed";
         }
     }
 

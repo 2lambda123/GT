@@ -1,7 +1,10 @@
 package com.gt.sokovia.controller;
 
 import com.gt.asgard.Thor;
+import com.gt.common.api.UserLoginRequest;
+import com.gt.common.api.UserLoginResponse;
 import com.gt.common.view.OrderView;
+import com.gt.common.view.UserView;
 import com.gt.sokovia.service.Wanda;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +32,31 @@ public class Vision {
     @GetMapping("/all")
     public List<OrderView> findAll() {
         return orderSerivce.findAll();
+    }
+
+    @GetMapping("/all/users")
+    public List<UserView> getAllUsersInDatabase() {
+        return orderSerivce.getAllUsersInDatabase();
+    }
+
+    @GetMapping("/users/validate/{userID}")
+    public boolean isUserInDatabase(@PathVariable String userID) {
+        return orderSerivce.isUserInDatabase(userID);
+    }
+
+    @PostMapping("/validate/login")
+    public UserLoginResponse isCorrectLogin(@RequestBody UserLoginRequest userLoginRequest) {
+        return new UserLoginResponse(orderSerivce.isCorrectLogin(userLoginRequest.getUsername(), userLoginRequest.getPassword()));
+    }
+
+    @PostMapping("/create/user")
+    public String createNewUser(@RequestBody UserLoginRequest userLoginRequest) {
+        return orderSerivce.createNewUser(userLoginRequest);
+    }
+
+    @GetMapping("/get/user/{userID}")
+    public List<OrderView> getAllUserOrders(@PathVariable String userID) {
+        return orderSerivce.getAllOrdersForUser(userID);
     }
 
     @GetMapping("/count")

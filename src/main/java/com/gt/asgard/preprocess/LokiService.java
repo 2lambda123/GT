@@ -38,7 +38,7 @@ public class LokiService {
             log.severe("Validation errors in the new order request");
         }
         long orderID = database.createNewOrder(request);
-        OrderView order = new OrderView(orderID, request.getSymbol(), request.getQuantity(), request.getPrice(), request.getSide());
+        OrderView order = new OrderView(orderID, request.getUserID(), request.getSymbol(), request.getQuantity(), request.getPrice(), request.getSide());
         log.info("Created Order: " + order.toString());
 
         // Match

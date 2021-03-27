@@ -26,16 +26,16 @@ public class TesseractTest {
     public void setup() {
         bids = new Tesseract(BookType.BID);
         asks = new Tesseract(BookType.ASK);
-        buyOrder = new OrderView(1L, "spx.us", 100L, 100.0, "buy");
-        sellOrder = new OrderView(2L, "spx.us", 100L, 100.0, "sell");
+        buyOrder = new OrderView(1L, "testUser", "spx.us", 100L, 100.0, "buy");
+        sellOrder = new OrderView(2L, "testUser", "spx.us", 100L, 100.0, "sell");
     }
 
     @AfterEach
     public void reset() {
         bids = new Tesseract(BookType.BID);
         asks = new Tesseract(BookType.ASK);
-        buyOrder = new OrderView(1L, "spx.us", 100L, 100.0, "buy");
-        sellOrder = new OrderView(2L, "spx.us", 100L, 100.0, "sell");
+        buyOrder = new OrderView(1L, "testUser", "spx.us", 100L, 100.0, "buy");
+        sellOrder = new OrderView(2L, "testUser", "spx.us", 100L, 100.0, "sell");
     }
 
     @Test

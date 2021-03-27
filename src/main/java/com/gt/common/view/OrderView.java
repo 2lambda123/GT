@@ -1,11 +1,10 @@
 package com.gt.common.view;
 
-import com.gt.common.api.OrderRequest;
-
 import java.util.Objects;
 
 public class OrderView {
     private Long id;
+    private String userID;
     private String symbol;
     private Long quantity;
     private Double price;
@@ -15,6 +14,7 @@ public class OrderView {
     public Long getId() {
         return id;
     }
+    public String getUserID() { return userID; }
     public Long getQuantity() {
         return quantity;
     }
@@ -28,6 +28,7 @@ public class OrderView {
     public void setId(Long id) {
         this.id = id;
     }
+    public void setUserID(String userID) { this.userID = userID; }
     public void setQuantity(Long quantity) {
         this.quantity = quantity;
     }
@@ -40,8 +41,9 @@ public class OrderView {
 
     public OrderView() {}
 
-    public OrderView(Long id, String symbol, Long quantity, Double price, String side) {
+    public OrderView(Long id, String userID, String symbol, Long quantity, Double price, String side) {
         this.id = id;
+        this.userID = userID;
         this.symbol = symbol;
         this.quantity = quantity;
         this.price = price;
@@ -64,7 +66,7 @@ public class OrderView {
 
     @Override
     public String toString() {
-        return "OrderView [id=" + this.id + ", symbol=" + this.symbol +
+        return "OrderView [id=" + this.id + ", userID=" + this.userID + ", symbol=" + this.symbol +
                 ", quantity=" + this.quantity + ", price=" + this.price +
                 ", side=" + this.side + ", remaining quantity=" + this.quantityRemaining + "]";
     }

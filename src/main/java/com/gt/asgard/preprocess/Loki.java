@@ -22,9 +22,6 @@ public class Loki {
         return service.submitRequest(request);
     }
 
-    /*
-    TODO: Implement cancel endpoint
-     */
     @PutMapping("/v1/request/cancel/{orderID}")
     public void cancelOrder(@PathVariable long orderID) throws Exception {
         service.cancelOrder(orderID);
