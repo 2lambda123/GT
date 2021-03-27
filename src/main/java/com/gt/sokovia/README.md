@@ -10,6 +10,10 @@ It contains 3 characters:
 
 Responsibilites include:
 
+Make it a table like:
+
+Vision | Wanda | Description
+
 1. findAll()
 	* Return all orders from the database
 
