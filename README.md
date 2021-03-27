@@ -1,15 +1,23 @@
+# What is Titan?
+
+Titan is going to be a collection of full stack projects with micro services utilizing different technologies
+
+## Go to Titan
+
+https://svelte-phi-puce.vercel.app/
 
 # Build Steps
-* mvn install -DskipTests
-* docker-compose up --build -d
 
-* docker-compose -f docker-compose.backend.yml up --build -d (if you want to make UI separate)
+* mvn install -DskipTests
+
+* docker-compose up --build -d
+* docker-compose -f docker-compose.backend.yml up --build -d
 
 * docker compose down
 
-# Post Request
-* Specify ID: {"id":"3","symbol":"c","quantity":100}
-* Allow auto generation of ID: {"symbol":"c","quantity":100}
+# API Endpoints
+
+Discussed in greater detail in each module's README.md file
 
 ## Prerequisites
 * [Docker](), [Git](https://git-scm.com/), [Maven](), [JDK 7 or 8](), [Eclipse or VSCode](), [Postman]()
