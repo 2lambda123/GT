@@ -7,6 +7,8 @@
 
 * docker compose down
 
+* docker compose down -v (Removes volumes as well -- this will be useful for integration testing)
+
 # Post Request
 * Specify ID: {"id":"3","symbol":"c","quantity":100}
 * Allow auto generation of ID: {"symbol":"c","quantity":100}

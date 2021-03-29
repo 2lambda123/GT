@@ -96,6 +96,10 @@ public class Tesseract implements InfinityStone {
         return order;
     }
 
+    /*
+    TODO: Update's logic needs to change. You should not be able to update the symbol, original quantity. It should just accept orderID and quantity changed.
+        These orders do not have lifecycle events attached to them, so they should not have the ability to change their key economics...
+     */
     @Override
     public void update(OrderView newOrder, long quantityChanged) throws Exception {
         long start = System.nanoTime();
