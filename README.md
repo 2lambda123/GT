@@ -15,7 +15,6 @@ https://svelte-phi-puce.vercel.app/
 
 * docker compose down
 
-<<<<<<< HEAD
 * docker compose down -v (Removes volumes as well -- this will be useful for integration testing)
 
 # Post Request
@@ -25,7 +24,6 @@ https://svelte-phi-puce.vercel.app/
 # API Endpoints
 
 Discussed in greater detail in each module's README.md file
->>>>>>> a77af81294f3f859b8225ec717684f18f903cea1
 
 ## Prerequisites
 * [Docker](), [Git](https://git-scm.com/), [Maven](), [JDK 7 or 8](), [Eclipse or VSCode](), [Postman]()
