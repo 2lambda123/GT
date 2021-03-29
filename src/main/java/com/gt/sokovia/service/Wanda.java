@@ -11,7 +11,9 @@ import com.gt.sokovia.repository.Pietro;
 import com.gt.sokovia.repository.UsersRepository;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import redis.clients.jedis.Jedis;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +30,12 @@ public class Wanda {
     private UsersRepository usersRepository;
 
     public Wanda() {}
+
+    public String getUser() {
+        Jedis jedis = new Jedis("redis");
+        jedis.set("foo","bar");
+        return jedis.get("foo");
+    }
 
     public List<OrderView> findAll() {
         List<OrderView> orderViewList = new ArrayList<>();

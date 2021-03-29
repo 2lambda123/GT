@@ -5,11 +5,13 @@ import com.gt.common.api.UserLoginRequest;
 import com.gt.common.api.UserLoginResponse;
 import com.gt.common.view.OrderView;
 import com.gt.common.view.UserView;
+import com.gt.sokovia.service.User;
 import com.gt.sokovia.service.Wanda;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,6 +29,11 @@ public class Vision {
 
     public Vision() {
         engine = new Thor();
+    }
+
+    @GetMapping("/redis")
+    public String getUser() {
+        return orderSerivce.getUser();
     }
 
     @GetMapping("/all")
