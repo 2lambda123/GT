@@ -6,9 +6,15 @@ import com.gt.asgard.preprocess.LokiService;
 import com.gt.sokovia.service.Wanda;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import redis.clients.jedis.Jedis;
 
 @Configuration
 public class AsgardConfig {
+
+    @Bean
+    public Jedis jedis() {
+       return new Jedis("redis");
+    }
 
     @Bean
     public Thor thor() {

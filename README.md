@@ -11,7 +11,7 @@ https://svelte-phi-puce.vercel.app/
 * mvn install -DskipTests
 
 * docker-compose up --build -d
-* docker-compose -f docker-compose.backend.yml up --build -d
+* docker-compose -f docker-compose.backend.yml -p titan up --build -d
 
 * docker compose down
 

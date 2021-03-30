@@ -2,10 +2,20 @@ package com.gt.asgard.cache;
 
 import com.gt.asgard.enums.BookType;
 import com.gt.common.view.OrderView;
+import lombok.extern.java.Log;
+import redis.clients.jedis.Jedis;
 
 import java.util.*;
 
+@Log
 public class Tesseract implements InfinityStone {
+
+//    public String getUser() {
+//        jedis.set("foo","bar");
+//        return jedis.get("foo");
+//    }
+
+    private Jedis jedis;
 
     // These 4 must always be affected together
     private double amountAvailable;
@@ -27,11 +37,15 @@ public class Tesseract implements InfinityStone {
         } else {
             this.numberOfSharesPerPrice = new TreeMap<>();
         }
+
+        jedis = new Jedis("redis");
+        jedis.set("available","0");
+        System.out.println("Amount in REDIS (Constructor): " + jedis.get("available"));
     }
 
     @Override
     public void add(OrderView order) throws Exception {
-        long start = System.nanoTime();
+        System.out.println("Amount in REDIS (Before): " + jedis.get("available"));
         long id = order.getId();
         double price = order.getPrice();
         long quantity = order.getQuantity();
@@ -49,12 +63,12 @@ public class Tesseract implements InfinityStone {
         cache.put(order.getId(), order);
         numberOfSharesPerPrice.put(order.getPrice(), numberOfSharesPerPrice.getOrDefault(order.getPrice(), 0L) + quantity);
         ordersGroupedByPrice.get(order.getPrice()).put(order.getId(), order);
+
+        // --- REDIS ---
+        // Amount Available
         amountAvailable += quantity;
-        long end = System.nanoTime();
-        double seconds = (double) (end - start) / 1_000_000_000.0;
-        if (id > 999_999 && id % 100_000 == 0) {
-            System.out.println("Add to cache time: " + seconds);
-        }
+        jedis.incrBy("available",quantity);
+        log.info("Amount in REDIS (After): " + jedis.get("available"));
     }
 
     @Override
