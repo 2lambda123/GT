@@ -50,6 +50,25 @@ services:
       SPRING_DATASOURCE_USERNAME: root
       SPRING_DATASOURCE_PASSWORD: gt
 
+  gtExchangeTwo:
+    image: gt-exchange-image
+    container_name: gt-exchange-app-2
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8085:8084"
+    restart: always
+    networks:
+      - titan-network
+    depends_on:
+      - db
+      - cache
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db2:3306/tx?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: gt
+
   cache:
     image: "redis:alpine"
     container_name: wanda-cache

@@ -1,0 +1,43 @@
+version: '3.3'
+
+services:
+  bifrost:
+    image: ivorytoast3853/bifrost
+    container_name: bifrost-app
+    networks:
+      my-net:
+        aliases:
+          - queue
+
+  thor:
+    image: ivorytoast3853/thor:1.3
+    container_name: thor-app
+    networks:
+      - my-net
+
+  thor2:
+    image: ivorytoast3853/thor:1.3
+    container_name: thor-app2
+    networks:
+      - my-net
+
+  thor3:
+    image: ivorytoast3853/thor:1.3
+    container_name: thor-app3
+    networks:
+      - my-net
+
+  loki:
+    image: ivorytoast3853/loki:1.1
+    container_name: loki-app
+    networks:
+      - my-net
+
+  loki2:
+    image: ivorytoast3853/loki:1.1
+    container_name: loki-app2
+    networks:
+      - my-net
+
+networks:
+  my-net:

@@ -1,3 +1,9 @@
+TODO:
+
+Make Loki Module
+Make Bifrost Module
+Make Thor Module
+
 # What is Titan?
 
 Titan is going to be a collection of full stack projects with micro services utilizing different technologies
@@ -9,6 +15,7 @@ https://svelte-phi-puce.vercel.app/
 # Build Steps
 
 * mvn install -DskipTests
+* mvn clean install -DskipTests
 
 * docker-compose up --build -d
 * docker-compose -f docker-compose.backend.yml -p titan up --build -d
@@ -17,12 +24,18 @@ https://svelte-phi-puce.vercel.app/
 
 * docker compose down -v (Removes volumes as well -- this will be useful for integration testing)
 
+# REDIS
+
+* docker ps
+
+* docker exec -it wanda-cache sh
+  * redis-cli (After you have ran the above command)
+
 # Post Request
 * Specify ID: {"id":"3","symbol":"c","quantity":100}
 * Allow auto generation of ID: {"symbol":"c","quantity":100}
-=======
-# API Endpoints
 
+# API Endpoints
 Discussed in greater detail in each module's README.md file
 
 ## Prerequisites
