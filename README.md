@@ -31,6 +31,15 @@ https://svelte-phi-puce.vercel.app/
 * docker exec -it wanda-cache sh
   * redis-cli (After you have ran the above command)
 
+# Docker
+
+docker run -it --network todo-app nicolaka/netshoot
+
+mvn clean install -DskipTests
+docker build -t ivorytoast3853/my-private-repo .
+docker run ivorytoast3853/my-private-repo
+docker push ivorytoast3853/my-private-repo
+
 # Post Request
 * Specify ID: {"id":"3","symbol":"c","quantity":100}
 * Allow auto generation of ID: {"symbol":"c","quantity":100}

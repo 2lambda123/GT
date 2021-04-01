@@ -3,41 +3,22 @@ version: '3.3'
 services:
   bifrost:
     image: ivorytoast3853/bifrost
-    container_name: bifrost-app
-    networks:
-      my-net:
-        aliases:
-          - queue
 
   thor:
-    image: ivorytoast3853/thor:1.3
-    container_name: thor-app
-    networks:
-      - my-net
+    image: ivorytoast3853/thor:1.5
 
   thor2:
-    image: ivorytoast3853/thor:1.3
-    container_name: thor-app2
-    networks:
-      - my-net
+    image: ivorytoast3853/thor:1.5
 
   thor3:
-    image: ivorytoast3853/thor:1.3
-    container_name: thor-app3
-    networks:
-      - my-net
+    image: ivorytoast3853/thor:1.5
 
   loki:
-    image: ivorytoast3853/loki:1.1
-    container_name: loki-app
-    networks:
-      - my-net
+    image: ivorytoast3853/loki:1.5
+    ports:
+      - "8084:8084"
 
-  loki2:
-    image: ivorytoast3853/loki:1.1
-    container_name: loki-app2
-    networks:
-      - my-net
-
-networks:
-  my-net:
+  redis:
+    image: "redis:alpine"
+    ports:
+      - "6379:6379"
