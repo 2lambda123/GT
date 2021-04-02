@@ -66,13 +66,13 @@ public class Thor {
 
             if (matchOutput.isFullyMatch()) {
                 if (debug) System.out.println("The buy order was fully matched!");
-                symbol.asks.removeOrder(matchOutput.getModifiedOrder().getId());
+                symbol.asks.removeOrder(matchedIncomingOrder.getId());
             } else {
                 if (debug) System.out.println("The buy order was partially matched!");
-                symbol.asks.updateOrder(matchOutput.getModifiedOrder(), originalQuantity - order.getQuantityRemaining());
+                symbol.asks.updateOrder(matchedIncomingOrder, originalQuantity - order.getQuantityRemaining());
             }
 
-            allAffectedOrders.add(matchOutput.getModifiedOrder());
+            allAffectedOrders.add(matchedIncomingOrder);
 
             // Remove/Update Existing Orders
             for (long orderID : matchOutput.getExistingOrdersToRemove()) {
