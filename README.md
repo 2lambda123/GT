@@ -24,6 +24,8 @@ https://svelte-phi-puce.vercel.app/
 
 * docker compose down -v (Removes volumes as well -- this will be useful for integration testing)
 
+* docker compose -p titan down
+
 # REDIS
 
 * docker ps

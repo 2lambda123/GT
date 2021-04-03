@@ -4,6 +4,10 @@ services:
   loki:
     restart: always
     image: ivorytoast3853/loki:latest
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db2:3306/titan?createDatabaseIfNotExist=true
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: gt
     ports:
       - "8084:8084"
 
@@ -14,6 +18,9 @@ services:
   thor:
     restart: always
     image: ivorytoast3853/thor:latest
+
+    depends_on:
+      - db
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db2:3306/titan?createDatabaseIfNotExist=true
       SPRING_DATASOURCE_USERNAME: root
